@@ -1,7 +1,9 @@
-import requests, os, shutil, nice-prompts
+import requests, os, shutil, nice_prompts
 
-term = ""
-size = 100
+n = nice_prompts.NicePrompt()
+
+term = input("Enter a search term: ")
+size = n.number(int, start=10)
 
 
 vals = []
@@ -42,17 +44,19 @@ url = "https://www.googleapis.com/customsearch/v1"
 
 num = size
 
-import requests, webbrowser
 from pprint import pprint
 last = []
 
+print("Select a SafeSearch level")
+s = n.selection({"No filtering": "off", "Enable SafeSerach filtering": "active"})
 for i in range(0, int(num), 10):
 	r = requests.get(url, params={
 		'key': key,
 		'cx': ID,
 		'q': term,
 		'searchType': 'image',
-		'start': i
+		'start': i,
+		'safe': s
 	})
 	try:
 		print(str(i) + str(r.json() == last) + str(len(r.json()['items'])))
